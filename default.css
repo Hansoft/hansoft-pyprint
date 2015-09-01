@@ -1,0 +1,13 @@
+.card	{
+	font-family: roboto, arial;
+	width:600px;
+	margin:5px;
+	padding: 10px;
+	border:1px dashed;
+}
+
+.name	{
+	font-weight:bold;
+	font-size:20px;
+	margin-bottom:8px;
+}
