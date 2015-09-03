@@ -30,8 +30,6 @@ def main(argv=None):
 		elif opt in ("-o", "--output"):
 			output=arg
 
-	
-
 	# Parse the input file
 	try:
 		tree = ET.parse(file)
@@ -47,37 +45,34 @@ def main(argv=None):
 			story = {}
 			story['name'] = task.find('TaskName').text
 			story['story'] = task.find('LongText').text
+			story['database_id'] = task.find('DatabaseID').text
 			stories.append(story)
 
 	# Print pretty
-	output = "<html><head>"
-
-	output = output + "<link rel='stylesheet' href='default.css' type='text/css' />"
-
-	output = output + "</head><body>"
-
+	html = "<html><head>"
+	html = html + "<link rel='stylesheet' href='" + style +  "' type='text/css' />"
+	html = html + "</head><body>"
 
 	for raw_story in stories:
-		# Prefix
-		output = output + "<div class='card'>"
-
 		# Clean up the story
 		story = raw_story['story']
 		story = story.replace("<BOLD>", "<strong>")
 		story = story.replace("</BOLD>","</strong>")
 		story = story.replace("\n", "<br />")
-
-		output = output + "<div class='name'>" + raw_story['name'] + "</div>"
-		output = output + story
-		# TODO - Fix colors
+		
+		# Prefix
+		html = html + "<div class='card'>"
+		
+		html = html + "<div class='name'>" + raw_story['name'] + " (#" + raw_story['database_id'] + ")</div>"
+		html = html + story
 
 		# Closing tags
-		output = output + "</div>"
+		html = html + "</div>"
 
-	output = output + "</body></html>"
+	html = html + "</body></html>"
 
-	file = FileIO('test.html', 'w')
-	file.write(output)
+	file = FileIO(output, 'w')
+	file.write(html)
 	file.close()
 
 main()

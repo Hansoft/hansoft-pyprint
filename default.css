@@ -1,9 +1,8 @@
 .card	{
 	font-family: roboto, arial;
-	width:600px;
-	margin:5px;
-	padding: 10px;
+	padding: 1%;
 	border:1px dashed;
+	height: 98%;
 }
 
 .name	{
