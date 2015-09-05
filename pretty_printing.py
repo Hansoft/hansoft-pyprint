@@ -44,7 +44,10 @@ def main(argv=None):
 		for task in activity.findall('Task'):
 			story = {}
 			story['name'] = task.find('TaskName').text
-			story['story'] = task.find('LongText').text
+			try:
+				story['story'] = task.find('LongText').text
+			except AttributeError:
+				story['story'] = ""
 			story['database_id'] = task.find('DatabaseID').text
 			stories.append(story)
 
@@ -71,8 +74,8 @@ def main(argv=None):
 
 	html = html + "</body></html>"
 
-	file = FileIO(output, 'w')
-	file.write(html)
-	file.close()
+	output_file = FileIO(output, 'w')
+	output_file.write(html)
+	output_file.close()
 
 main()

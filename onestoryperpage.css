@@ -1,0 +1,17 @@
+.card	{
+	font-family: roboto, arial;
+	padding: 1%;
+	border:1px dashed;
+	height: 98%;
+}
+
+.name	{
+	font-weight:bold;
+	font-size:20px;
+	margin-bottom:8px;
+	text-align:center;
+}
+
+ul	{
+	font-size: 10px;
+}
