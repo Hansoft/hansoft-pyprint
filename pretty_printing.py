@@ -1,3 +1,17 @@
+#!/usr/bin/env python
+"""The hansoft-pyprint prints the user story field in a Hansoft XML file.
+
+Args:
+--file=file.xml The input file that will be printed.
+--style=file.css The style that should be applied.
+--output=file.html The destination of the file.
+
+Returns:
+Generates a .html file to be open in a browser that can be
+printed to pdf or a printer.
+
+"""
+
 import sys
 import getopt
 import xml.etree.ElementTree as ET
@@ -11,8 +25,8 @@ def main(argv=None):
 	output = "cards.html"
 
 	try:
-		opts, args = getopt.getopt(argv[1:], "hs:f:o:d", ["help", "style=","file=", "output="])
-	except getopt.GetOptError:
+		opts, args = getopt.getopt(argv[1:], "hs:f:o:", ["help", "style=","file=", "output="])
+	except getopt.GetoptError:
 		usage()
 		sys.exit(2)
 
@@ -20,9 +34,6 @@ def main(argv=None):
 		if opt in ("-h", "--help"):
 			usage()
 			sys.exit()
-		elif opt == 'd':
-			global debug
-			_debug = 1
 		elif opt in ("-s", "--style"):
 			style=arg
 		elif opt in ("-f", "--file"):
