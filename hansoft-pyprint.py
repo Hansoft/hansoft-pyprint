@@ -2,7 +2,7 @@
 """The hansoft-pyprint prints the user story field in a Hansoft XML file.
 
 Args:
---file=file.xml The input file that will be printed.
+--xml=file.xml The input file that will be printed.
 --style=file.css The style that should be applied.
 --output=file.html The destination of the file.
 
@@ -11,47 +11,43 @@ Generates a .html file to be open in a browser that can be
 printed to pdf or a printer.
 
 """
-
 import sys
-import getopt
+from optparse import OptionParser
 import xml.etree.ElementTree as ET
 from io import FileIO
 
 def main(argv=None):
 	if argv is None:
 		argv = sys.argv
-	style = "default.css"
-	file = "hansoft.xml"
-	output = "cards.html"
 
-	try:
-		opts, args = getopt.getopt(argv[1:], "hs:f:o:", ["help", "style=","file=", "output="])
-	except getopt.GetoptError:
-		usage()
-		sys.exit(2)
-
-	for opt, arg in opts:
-		if opt in ("-h", "--help"):
-			usage()
-			sys.exit()
-		elif opt in ("-s", "--style"):
-			style=arg
-		elif opt in ("-f", "--file"):
-			file=arg
-		elif opt in ("-o", "--output"):
-			output=arg
+	parser = OptionParser()
+	parser.add_option("-x", "--xml",
+			  dest="xml",
+			  help="Input Hansoft XML",
+			  metavar="FILE",
+			  default='hansoft.xml')
+	parser.add_option("-s", "--style",
+			  dest="css", 
+			  help="CSS Style to use in generated html",
+			  metavar="FILE",
+			  default='default.css')
+	parser.add_option("-o", "--output",
+			  dest="html",
+			  help="Output HTML file destination",
+			  metavar="FILE",
+			  default='output.html')
+	(opts, args) = parser.parse_args()
 
 	# Parse the input file
 	try:
-		tree = ET.parse(file)
+		tree = ET.parse(opts.xml)
 	except IOError:
-		print "The file " + file + " could not be found."
+		print "The file " + opts.xml + " could not be found."
 		sys.exit(0)
 
 	root = tree.getroot()
 	stories = []
 	for activity in root.findall('Activities'):
-		# TODO - add a title
 		for task in activity.findall('Task'):
 			story = {}
 			story['name'] = task.find('TaskName').text
@@ -64,7 +60,7 @@ def main(argv=None):
 
 	# Print pretty
 	html = "<html><head>"
-	html = html + "<link rel='stylesheet' href='" + style +  "' type='text/css' />"
+	html = html + "<link rel='stylesheet' href='" + opts.css +  "' type='text/css' />"
 	html = html + "</head><body>"
 
 	for raw_story in stories:
@@ -85,7 +81,7 @@ def main(argv=None):
 
 	html = html + "</body></html>"
 
-	output_file = FileIO(output, 'w')
+	output_file = FileIO(opts.html, 'w')
 	output_file.write(html)
 	output_file.close()
 
