@@ -16,6 +16,14 @@ hansoft-pyprint is licensed under what is known as a MIT License as states in th
 This content of this repository is not part of the official Hansoft product or subject to its license agreement.
 The content of this repository is provided as is and there is no obligation on Hansoft AB to provide support, update or enhance this program.
 
+Options
+-------
+* -h, --help : show help message and exit
+* -x FILE, --xml FILE : Input Hansoft XML
+* -s FILE, --style FILE : CSS Style to use in generated html
+* -o FILE, --output FILE : Output HTML file destination
+* -u : Only print items Flagged as User Story
+
 Styles
 ------
 The python script hansoft-pyprint.py generates a very simple HTML file. In this file it uses css classes that you can customize:
