@@ -5,6 +5,7 @@ Args:
 --xml=file.xml The input file that will be printed.
 --style=file.css The style that should be applied.
 --output=file.html The destination of the file.
+-u Flag to only print items flagged as user stories.
 
 Returns:
 Generates a .html file to be open in a browser that can be
