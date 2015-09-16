@@ -12,7 +12,7 @@ printed to pdf or a printer.
 
 """
 import sys
-from optparse import OptionParser
+import argparse
 import xml.etree.ElementTree as ET
 from io import FileIO
 
@@ -20,23 +20,36 @@ def main(argv=None):
 	if argv is None:
 		argv = sys.argv
 
-	parser = OptionParser()
-	parser.add_option("-x", "--xml",
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-x", "--xml",
 			  dest="xml",
+			  type=file,
 			  help="Input Hansoft XML",
 			  metavar="FILE",
 			  default='hansoft.xml')
-	parser.add_option("-s", "--style",
-			  dest="css", 
+	parser.add_argument("-s", "--style",
+			  dest="css",
+			  type=file,
 			  help="CSS Style to use in generated html",
 			  metavar="FILE",
 			  default='default.css')
-	parser.add_option("-o", "--output",
+	parser.add_argument("-o", "--output",
 			  dest="html",
+			  type=argparse.FileType('w'),
 			  help="Output HTML file destination",
 			  metavar="FILE",
 			  default='output.html')
-	(opts, args) = parser.parse_args()
+	parser.add_argument("-u",
+			  dest='userstory',
+			  help='Only print items Flagged as User Story',
+			  action='store_true')
+	try:
+		opts = parser.parse_args()
+	except IOError as e:
+		print "I/O error ({0}): {1}".format(e.errno, e.strerror)
+		sys.exit(e.errno)
+	except:
+		print "Unexpected error:", sys.exc_info()[0]
 
 	# Parse the input file
 	try:
@@ -50,6 +63,8 @@ def main(argv=None):
 	for activity in root.findall('Activities'):
 		for task in activity.findall('Task'):
 			story = {}
+			if not task.findtext('FlaggedAsUserStory') == '1' and opts.userstory:
+				continue
 			story['name'] = task.find('TaskName').text
 			try:
 				story['story'] = task.find('LongText').text
@@ -60,7 +75,7 @@ def main(argv=None):
 
 	# Print pretty
 	html = "<html><head>"
-	html = html + "<link rel='stylesheet' href='" + opts.css +  "' type='text/css' />"
+	html = html + "<link rel='stylesheet' href='" + opts.css.name +  "' type='text/css' />"
 	html = html + "</head><body>"
 
 	for raw_story in stories:
@@ -81,8 +96,7 @@ def main(argv=None):
 
 	html = html + "</body></html>"
 
-	output_file = FileIO(opts.html, 'w')
-	output_file.write(html)
-	output_file.close()
+	opts.html.write(html)
+	opts.html.close()
 
 main()
