@@ -78,6 +78,8 @@ def main(argv=None):
 			story['database_id'] = task.find('DatabaseID').text
 			# Product Backlog Priority
 			story['priority'] = task.findtext('PreCreatedColumn_MainBacklogPriority')
+			# Sub project path
+			story['subprojectpath'] = task.findtext('SubProjectPath')
 			if opts.category:
 				custom_data = task.find('CustomColumnDatas')
 				if not custom_data is None:
@@ -102,30 +104,32 @@ def main(argv=None):
 		story = story.replace("\n", "<br />")
 		
 		# Prefix
-		html = html + "<div class='card'>"
+		html = html + "<div class='card'><div class='card-header'>"
 		if 'category' in raw_story:
 			html = html + "<div class='" + raw_story['category'] + "'>"
-		if 'priority' in raw_story:
-			html = html + "<div class='prio-" + raw_story['priority'] + "'>"
 
-		html = html + "<div class='name'>" + raw_story['name'] + " ("
-		if 'priority' in raw_story:
-			html = html + raw_story['priority'] + " / " 
-		html = html + "#" + raw_story['database_id'] + ")"
-	
+		if 'subprojectpath' in raw_story:
+			html = html + "<div class='subprojectpath'>" + raw_story['subprojectpath'] + "</div>"
+		
+		if not raw_story['priority'] is None:
+                        html = html + "<div class='prio'><div class='prio-" + raw_story['priority'] + "'>Prio: " + raw_story['priority'] + "</div></div>"
+
+		html = html + "<div class='databaseid'>ID: " + raw_story['database_id']+"</div>"
+		# Close header
 		html = html + "</div>"
-		html = html + story
+
+		html = html + "<div class='name'>" + raw_story['name'] + "</div>"
+		if story:
+			html = html + "<div class='story'>" + story + "</div>"
 
 		# Closing tags
 		html = html + "</div>"
 		if 'category' in raw_story:
 			html = html + "</div>"
-		if 'priority' in raw_story:
-			html = html + "</div>"
 
 	html = html + "</body></html>"
 
-	opts.html.write(html)
+	opts.html.write(html.encode('utf-8'))
 	opts.html.close()
 
 main()

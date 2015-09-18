@@ -3,9 +3,23 @@ body	{
 	
 }
 
+.subprojectpath	{
+	float:left;
+}
+
+.prio	{
+	text-align:right;
+}
+
+.databaseid	{
+	text-align:right;
+	float:right;
+}
+
 .card	{
 	margin: 1%;
 	page-break-inside:avoid;
+	border:dashed;
 }
 
 .name	{
@@ -16,7 +30,6 @@ body	{
 
 .standard	{
 	padding: 1%;
-	background-color:#298FC2;
 }
 
 .expedite	{
@@ -36,6 +49,11 @@ body	{
 
 .prio-5	{
 	color:#E1523D;
+	font-weight:bold;
+}
+
+.prio-4	{
+	font-weight:bold;
 }
 
 ul	{

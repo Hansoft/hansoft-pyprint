@@ -3,6 +3,24 @@ body	{
 	
 }
 
+.card-header	{
+		
+}
+
+.subprojectpath	{
+		float:left;
+}
+
+.prio	{
+	text-align:right;
+	float:none;
+}
+
+.databaseid	{
+	float:none;
+	text-align:right;
+}
+
 .card	{
 	padding-bottom: 1%;
 	page-break-inside: avoid;
@@ -12,6 +30,16 @@ body	{
 	font-weight:bold;
 	font-size:20px;
 	margin-bottom:8px;
+}
+
+.prio-5	{
+        color:#E1523D;
+        font-weight:bold;
+}
+
+.prio-4	{
+	font-weight:bold;
+
 }
 
 ul	{
