@@ -104,10 +104,11 @@ def main(argv=None):
 		story = story.replace("\n", "<br />")
 		
 		# Prefix
-		html = html + "<div class='card'><div class='card-header'>"
+		html = html + "<div class='card'>"
 		if 'category' in raw_story:
 			html = html + "<div class='" + raw_story['category'] + "'>"
 
+		html = html + "<div class='card-header'>"
 		if 'subprojectpath' in raw_story:
 			html = html + "<div class='subprojectpath'>" + raw_story['subprojectpath'] + "</div>"
 		
