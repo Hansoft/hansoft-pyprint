@@ -1,0 +1,43 @@
+body	{
+	font-family: roboto, arial;
+	
+}
+
+.card	{
+	margin: 1%;
+	page-break-inside:avoid;
+}
+
+.name	{
+	font-weight:bold;
+	font-size:20px;
+	margin-bottom:8px;
+}
+
+.standard	{
+	padding: 1%;
+	background-color:#298FC2;
+}
+
+.expedite	{
+	padding:1%;
+	background-color:##EF9600;
+}
+
+.intangible	{
+	padding: 1%;
+	background-color:#6CC24A;
+}
+
+.fixed-date	{
+	padding:1%;
+	background-color:#FDD757;
+}
+
+.prio-5	{
+	color:#E1523D;
+}
+
+ul	{
+	font-size: 12px;
+}
