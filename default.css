@@ -5,6 +5,7 @@ body	{
 
 .card	{
 	padding-bottom: 1%;
+	page-break-inside: avoid;
 }
 
 .name	{
