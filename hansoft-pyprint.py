@@ -79,7 +79,9 @@ def main(argv=None):
 			# Product Backlog Priority
 			story['priority'] = task.findtext('PreCreatedColumn_MainBacklogPriority')
 			# Sub project path
-			story['subprojectpath'] = task.findtext('SubProjectPath')
+			subprojectpath = task.findtext('SubProjectPath')
+			if subprojectpath:
+				story['subprojectpath'] = subprojectpath
 			if opts.category:
 				custom_data = task.find('CustomColumnDatas')
 				if not custom_data is None:
