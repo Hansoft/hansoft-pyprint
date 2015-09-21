@@ -27,13 +27,9 @@ Options
 
 Styles
 ------
-The python script hansoft-pyprint.py generates a very simple HTML file that can be associated with a stylesheet (.css file). There are two examples in this repository:
+The python script hansoft-pyprint.py generates a very simple HTML file that can be associated with a stylesheet (.css file). There are three examples in this repository:
 * default.css - Simple and basic printing the user stories one by one.
 * onestoryperpage.css - Prints one user story per page.
 * classofservice.css - Example when using a category column with the choices (Expedite, Standard, Fixed Date, Intangible)
 
-Css classes that you can customize:
-* .card - control style of each card/user story. Typically where you would add borders, set a background color etc.
-* .name - control style of the item name as displayed in Hansoft.
-* If using the -c flag with a custom column you can use the values in the custom columns.
-* .prio-X - X is a number 1 (Very low prio) - 5 (Very high prio) to style depending on priority.
+You can use your own css files. The template file template-story.html shows all classes you can customise.
