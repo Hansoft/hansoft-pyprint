@@ -3,27 +3,37 @@ body	{
 	
 }
 
-.card-header	{
-		
+table	{
+	width:100%;
+}
+
+ul	{
+	font-size:12px;
+}
+
+.story-header	{
+	table-layout:fixed;
+	text-align: left;
+	font-size:12px;
 }
 
 .subprojectpath	{
-		float:left;
 }
 
-.prio	{
-	text-align:right;
-	float:none;
+.prio-header	{
+}
+
+.status-header	{
 }
 
 .databaseid	{
-	float:none;
-	text-align:right;
 }
 
-.card	{
-	padding-bottom: 1%;
+.story	{
+	padding-bottom: 5%;
+	margin-bottom: 2%;
 	page-break-inside: avoid;
+	border:1px solid;
 }
 
 .name	{
@@ -40,8 +50,4 @@ body	{
 .prio-4	{
 	font-weight:bold;
 
-}
-
-ul	{
-	font-size: 12px;
 }

@@ -17,6 +17,28 @@ import sys
 import argparse
 import xml.etree.ElementTree as ET
 from io import FileIO
+from string import Template
+
+PRIO = {
+	'-1': '(No prio set)',
+	'1': 'Very Low',
+	'2': 'Low',
+	'3': 'Medium',
+	'4': 'High',
+	'5': 'Very High'
+	}
+
+STATUS = {
+	'1': 'Not Done',
+	'2': 'In Progress',
+	'3': 'Completed',
+	'4': 'Blocked',
+	'5': 'To be deleted'
+}
+
+TEMPLATEHEADER = "template-header.html"
+TEMPLATESTORY = "template-story.html"
+TEMPLATEFOOTER = "template-footer.html"
 
 def main(argv=None):
 	if argv is None:
@@ -60,7 +82,9 @@ def main(argv=None):
 	except IOError:
 		print "The file " + opts.xml + " could not be found."
 		sys.exit(0)
-
+	except ET.ParseError as e:
+		print "Error parsing XML input:", e
+		sys.exit()
 	root = tree.getroot()
 	stories = []
 	for activity in root.findall('Activities'):
@@ -72,16 +96,19 @@ def main(argv=None):
 			if story['name'] is None:
 				story['name'] = '(No name)'
 			try:
-				story['story'] = task.find('LongText').text
+				story['story'] = task.findtext('LongText')
 			except AttributeError:
 				story['story'] = ""
-			story['database_id'] = task.find('DatabaseID').text
-			# Product Backlog Priority
+			story['databaseid'] = task.findtext('DatabaseID')
 			story['priority'] = task.findtext('PreCreatedColumn_MainBacklogPriority')
-			# Sub project path
+			if story['priority'] is None:
+				story['priority'] = "-1"
+			story['status'] = task.findtext('PreCreatedColumn_ItemStatus')
 			subprojectpath = task.findtext('SubProjectPath')
 			if subprojectpath:
 				story['subprojectpath'] = subprojectpath
+			else:
+				story['subprojectpath'] = '(No parent)'
 			if opts.category:
 				custom_data = task.find('CustomColumnDatas')
 				if not custom_data is None:
@@ -89,14 +116,30 @@ def main(argv=None):
 					if category:
 						category = category.replace(' ', '-')
 						category = category.lower()
-					# Clean data
 						story['category'] = category
+			if not 'category' in story:
+				story['category'] = 'no-category'
+
 			stories.append(story)
 
 	# Print pretty
-	html = "<html><head>"
-	html = html + "<link rel='stylesheet' href='" + opts.css.name +  "' type='text/css' />"
-	html = html + "</head><body>"
+	try:
+		template_header_file = open(TEMPLATEHEADER, 'r')
+	except IOError as e:
+		print "Missing file:", TEMPLATEHEADER
+		sys.exit(e.errno)
+
+	template_header = Template(template_header_file.read())
+	template_header_file.close()
+	html = template_header.substitute(stylesheet=opts.css.name)
+
+	try:
+		template_story_file = open(TEMPLATESTORY, 'r')
+	except IOError as e:
+		print "Missing file:", TEMPLATESTORY
+		sys.exit(e.errno)
+	template_story = Template(template_story_file.read())
+	template_story_file.close()
 
 	for raw_story in stories:
 		# Clean up the story
@@ -104,33 +147,25 @@ def main(argv=None):
 		story = story.replace("<BOLD>", "<strong>")
 		story = story.replace("</BOLD>","</strong>")
 		story = story.replace("\n", "<br />")
-		
-		# Prefix
-		html = html + "<div class='card'>"
-		if 'category' in raw_story:
-			html = html + "<div class='" + raw_story['category'] + "'>"
 
-		html = html + "<div class='card-header'>"
-		if 'subprojectpath' in raw_story:
-			html = html + "<div class='subprojectpath'>" + raw_story['subprojectpath'] + "</div>"
-		
-		if not raw_story['priority'] is None:
-                        html = html + "<div class='prio'><div class='prio-" + raw_story['priority'] + "'>Prio: " + raw_story['priority'] + "</div></div>"
+		html = html +  template_story.substitute(
+			category=raw_story['category'],
+			databaseid=raw_story['databaseid'],
+			prio=raw_story['priority'],
+			prioname=PRIO[raw_story['priority']],
+			status=raw_story['status'],
+			statusname=STATUS[raw_story['status']],
+			subprojectpath=raw_story['subprojectpath'],
+			name=raw_story['name'],
+			story=raw_story['story']
+			)
 
-		html = html + "<div class='databaseid'>ID: " + raw_story['database_id']+"</div>"
-		# Close header
-		html = html + "</div>"
-
-		html = html + "<div class='name'>" + raw_story['name'] + "</div>"
-		if story:
-			html = html + "<div class='story'>" + story + "</div>"
-
-		# Closing tags
-		html = html + "</div>"
-		if 'category' in raw_story:
-			html = html + "</div>"
-
-	html = html + "</body></html>"
+	try:
+		template_story_footer = open(TEMPLATEFOOTER, 'r')
+	except IOError:
+		print "Missing file:", TEMPLATEFOOTER
+	html = html + template_story_footer.read()
+	template_story_footer.close()
 
 	opts.html.write(html.encode('utf-8'))
 	opts.html.close()

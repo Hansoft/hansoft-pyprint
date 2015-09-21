@@ -1,25 +1,34 @@
 body	{
-	font-family: roboto, arial;
-	
+	font-family: roboto, arial;	
 }
 
-.subprojectpath	{
-	float:left;
+table	{
+	width:100%;
 }
 
-.prio	{
-	text-align:right;
+ul	{
+	font-size:12px;
 }
 
-.databaseid	{
-	text-align:right;
-	float:right;
+.story-header	{
+	table-layout: fixed;
+	text-align: left;
+	font-size: 12px;
 }
 
-.card	{
-	margin: 1%;
+.status-header	{
+
+}
+
+.prio-header	{
+}
+
+.story	{
+	padding:1%;
+	padding-bottom: 5%;
+	margin-bottom: 2%;
 	page-break-inside:avoid;
-	border:dashed;
+	border:2px dashed;
 }
 
 .name	{
@@ -34,7 +43,7 @@ body	{
 
 .expedite	{
 	padding:1%;
-	background-color:##EF9600;
+	background-color:#EF9600;
 }
 
 .intangible	{
@@ -54,8 +63,4 @@ body	{
 
 .prio-4	{
 	font-weight:bold;
-}
-
-ul	{
-	font-size: 12px;
 }
