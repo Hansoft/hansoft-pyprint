@@ -37,7 +37,6 @@ STATUS = {
 }
 
 TEMPLATEHEADER = "template-header.html"
-TEMPLATESTORY = "template-story.html"
 TEMPLATEFOOTER = "template-footer.html"
 
 def main(argv=None):
@@ -70,6 +69,10 @@ def main(argv=None):
 	parser.add_argument("-c",
 			    dest='category',
 			    help='Name of custom category column for style options.')
+	parser.add_argument("-t",
+			    dest='template_story',
+			    help='Template HTML for each story.',
+			    default="template-story.html")
 	try:
 		opts = parser.parse_args()
 	except IOError as e:
@@ -134,14 +137,16 @@ def main(argv=None):
 	html = template_header.substitute(stylesheet=opts.css.name)
 
 	try:
-		template_story_file = open(TEMPLATESTORY, 'r')
+		template_story_file = open(opts.template_story, 'r')
 	except IOError as e:
-		print "Missing file:", TEMPLATESTORY
+		print "Missing file:", opts.template_story
 		sys.exit(e.errno)
 	template_story = Template(template_story_file.read())
 	template_story_file.close()
 
 	for raw_story in stories:
+		if not raw_story['story']:
+			continue
 		# Clean up the story
 		story = raw_story['story']
 		story = story.replace("<BOLD>", "<strong>")
