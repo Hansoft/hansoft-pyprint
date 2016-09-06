@@ -46,13 +46,13 @@ def main(argv=None):
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-x", "--xml",
 			  dest="xml",
-			  type=file,
+			  type=argparse.FileType('r'),
 			  help="Input Hansoft XML",
 			  metavar="FILE",
 			  default='hansoft.xml')
 	parser.add_argument("-s", "--style",
 			  dest="css",
-			  type=file,
+			  type=argparse.FileType('r'),
 			  help="CSS Style to use in generated html",
 			  metavar="FILE",
 			  default='default.css')
@@ -76,17 +76,17 @@ def main(argv=None):
 	try:
 		opts = parser.parse_args()
 	except IOError as e:
-		print "I/O error ({0}): {1}".format(e.errno, e.strerror)
+		print("I/O error ({0}): {1}".format(e.errno, e.strerror))
 		sys.exit(e.errno)
 
 	# Parse the input file
 	try:
 		tree = ET.parse(opts.xml)
 	except IOError:
-		print "The file " + opts.xml + " could not be found."
+		print("The file " + opts.xml + " could not be found.")
 		sys.exit(0)
 	except ET.ParseError as e:
-		print "Error parsing XML input:", e
+		print("Error parsing XML input:", e)
 		sys.exit()
 	root = tree.getroot()
 	stories = []
@@ -129,7 +129,7 @@ def main(argv=None):
 	try:
 		template_header_file = open(TEMPLATEHEADER, 'r')
 	except IOError as e:
-		print "Missing file:", TEMPLATEHEADER
+		print("Missing file:", TEMPLATEHEADER)
 		sys.exit(e.errno)
 
 	template_header = Template(template_header_file.read())
@@ -139,7 +139,7 @@ def main(argv=None):
 	try:
 		template_story_file = open(opts.template_story, 'r')
 	except IOError as e:
-		print "Missing file:", opts.template_story
+		print("Missing file:", opts.template_story)
 		sys.exit(e.errno)
 	template_story = Template(template_story_file.read())
 	template_story_file.close()
@@ -168,11 +168,11 @@ def main(argv=None):
 	try:
 		template_story_footer = open(TEMPLATEFOOTER, 'r')
 	except IOError:
-		print "Missing file:", TEMPLATEFOOTER
+		print("Missing file:", TEMPLATEFOOTER)
 	html = html + template_story_footer.read()
 	template_story_footer.close()
 
-	opts.html.write(html.encode('utf-8'))
+	opts.html.write(html)
 	opts.html.close()
 
 main()

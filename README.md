@@ -5,6 +5,8 @@ Overview
 --------
 Hansoft-pyprint parses a Hansoft XML file and generates a simple HTML file associated with a CSS Stylesheet. This let's you quickly generate printouts of user stories.
 
+To run this script, you must have *Python 3* (available at www.python.org).
+
 Example use cases:
 * Print user stories from a sprint backlog. Export the sprint backlog items to Hansoft XML and run the command `python hansoft-pyprint.py --xml=hansoft.xml -u`
 * Print items in the product backlog for a backlog priotization meeting on one page per sheet of paper. Export the items from the product backlog and run the command `python hansoft-pyprint.py --xml=hansoft.xml --style=onestoryperpage.css`
